@@ -1,0 +1,28 @@
+{% extends "_layout.html" %}
+
+{% block title %}
+  401 Error
+{% endblock %}
+
+{% block content %}
+  <div class="error_container">
+    <h1 class="text-dark text-center lead display-3">Unauthorized</h1>
+    <p class="text-center text-dark lead">You must be logged in to do that. Redirecting you to login page in <span id="timer">3</span> seconds...</p>
+  </div>
+
+  <script>
+
+    x = document.getElementById("timer")
+
+    window.setTimeout(function(){ 
+        window.location.href = "{{ url_for('sessions.login') }}";
+    }, 3000);
+
+    countdown = setInterval(function(){
+        if (x.innerHTML >= 1) { x.innerHTML = x.innerHTML-1 }
+        else clearInterval(countdown)
+    }, 1000);
+
+  </script>
+
+{% endblock %}

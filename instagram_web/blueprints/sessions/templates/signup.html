@@ -1,0 +1,44 @@
+{% extends '_layout.html' %}
+
+{% block title %}
+Sign Up
+{% endblock %}
+
+{% block content %}
+
+<div class="signup_container">
+
+    <h3 class="display-4 text-center mb-4">Join Now</h3>
+  
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-light" role="alert">
+        {% for message in messages %}
+        <span>{{ message }}</span>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+  
+    <form class="mt-2" action="{{ url_for('users.create') }}" method="POST">
+      <input name="email" class="form-control" type="email" placeholder="Email Address" autofocus required>
+      <!-- <small class="form-text text-muted">
+          A valid email address must be entered as it will be required to perform various account operations.
+      </small> -->
+      <input name="username" class="form-control mt-2 username_lowercase" type="text" placeholder="Username" required>
+      <small class="form-text text-muted">
+          Your username must be 5-20 characters long and can only contain letters, numbers, periods and underscores.
+      </small>
+      <input name="password" class="form-control mt-2" type="password" placeholder="Password" required>
+      <small class="form-text text-muted">
+          Your password must be 8-20 characters long, can only contain letters and numbers, and must include a combination of "your" and "mom".
+      </small>
+      <button class="btn btn-success mt-3 mb-3 btn-block" type="submit">Sign Up</button> 
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+    <p class="text-center lead mt-3">Already have an account? <a class="text-decoration-none" href="{{ url_for('sessions.login') }}">Sign in</a> instead.</p>
+  
+  </div>
+
+
+{% endblock %}

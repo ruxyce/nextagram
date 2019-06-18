@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.ico') }}">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    {% block header %}{% endblock %}
+    <title>{% block title %}{% endblock %}( ͡o ͜ʖ ͡o)</title>
+  </head>
+  <body>
+
+      <nav class="navbar fixed-top navbar-expand-md navbar-dark bg-dark px-0 pt-0 pt-md-2 ">
+
+          <ul class="navbar_ul">
+            <li class="navbar_li navbar_li_left">
+              <a class="navbar_li_a" href="{{ url_for('home') }}">
+                {{ ['( ͡o ͜ʖ ͡o)','( ´･ω･)']|random }}
+              </a>
+            </li>
+            <li class="navbar_li navbar_li_left"><a class="navbar_li_a" href="{{ url_for('posts.all_posts') }}"><i class="fas fa-check-double"></i> All</a></li>
+            <li class="navbar_li navbar_li_left"><a class="navbar_li_a" href="{{ url_for('posts.feed') }}"><i class="far fa-images"></i> Feed</a></li>
+            <li class="navbar_li navbar_li_left"><a class="navbar_li_a" href="{{ url_for('users.all_users') }}"><i class="fas fa-users"></i> Users</a></li>
+          </ul> 
+
+          <button class="navbar-toggler ml-auto mr-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse bg-dark ml-auto" id="navbarSupportedContent">
+            {% if current_user.is_authenticated %}
+            <form action="{{ url_for('users.search') }}" class="form-inline d-md-none">
+              <input class="form-control my-2 mx-3" name="q" type="search" placeholder="Search Users..." aria-label="Search">
+            </form>
+            <ul class="navbar-nav d-md-none">
+              <li class="nav-item"><a class="nav-link bg-dark text-light" href="{{ url_for('posts.new') }}">&nbsp;&nbsp;&nbsp; Create New Post</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle bg-dark text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&nbsp;&nbsp;&nbsp; My Account</a>
+                <div class="dropdown-menu bg-dark text-light" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item bg-dark text-light" href="{{ url_for('users.userpage',username=current_user.username) }}">Go to Profile Page</a>
+                  <a class="dropdown-item bg-dark text-light" href="#">Edit Account Details</a>
+                  <a class="dropdown-item bg-dark text-light" href="{{ url_for('profile.update_avatar') }}">Edit Avatar</a>
+                </div>
+              </li>
+              <li class="nav-item"><a class="nav-link bg-dark text-light" href="{{ url_for('sessions.signout') }}">&nbsp;&nbsp;&nbsp; Sign Out</a></li>
+            </ul>
+            {% else %}
+            <ul class="navbar-nav d-md-none">
+              <li class="nav-item"><a class="nav-link bg-dark text-light" href="{{ url_for('sessions.login') }}">&nbsp;&nbsp;&nbsp; Login</a></li> 
+              <li class="nav-item"><a class="nav-link bg-dark text-light" href="{{ url_for('sessions.signup') }}">&nbsp;&nbsp;&nbsp; Sign Up</a></li>             
+            </ul>
+            {% endif %}
+          </div>
+
+            {% if current_user.is_authenticated %}
+
+            <form action="{{ url_for('users.search') }}" class="ml-auto d-none d-md-block">
+              <input class="navbar_search_input" name="q" type="search" placeholder="Search Users...">
+            </form>
+            <ul class="navbar_ul d-none d-md-block">
+
+              <li class="navbar_li navbar_li_right">
+                <a class="navbar_li_a pr-3" href="#" id="navbarDropdownButton" data-toggle="dropdown">
+                  <i class="fas fa-caret-down"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right mt-0 bg-dark" aria-labelledby="navbarDropdownButton">
+                  <a class="dropdown-item text-light bg-dark" href="{{ url_for('home') }}">Edit Account Details</a>
+                  <a class="dropdown-item text-light bg-dark" href="{{ url_for('profile.update_avatar') }}">Edit Avatar</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item text-light bg-dark" href="{{ url_for('sessions.signout') }}">Sign Out</a>
+                </div>
+              </li>
+              <li class="navbar_li navbar_li_right">
+                <a class="navbar_li_a" href="{{ url_for('users.userpage',username=current_user.username) }}">
+                    <img src="{{ current_user.avatar_url }}" width="30" height="30" style="border:2px solid white;border-radius:50%;position:relative;top:-3px;margin-right:4px; object-fit: cover;">
+                    <span style="position:relative;top:-1px;">{{ current_user.username }}</span>
+                </a>
+              </li>
+              <li class="navbar_li navbar_li_right">
+                <a class="navbar_li_a" href="{{ url_for('posts.new') }}"><i class="fas fa-plus"></i> New Post</a>
+              </li>
+            </ul>
+
+            {% else %}
+              <form action="{{ url_for('sessions.login') }}" class="d-none d-md-block" method="GET">
+                <button type="submit" class="btn btn-primary btn-sm mr-2">Login</button>
+              </form>
+              <form action="{{ url_for('sessions.signup') }}" class="d-none d-md-block" method="GET">
+                <button type="submit" class="btn btn-success btn-sm mr-3">Sign Up</button>
+              </form>
+            {% endif %}
+
+          
+        </nav>
+
+
+    <div class="after_navbar_margins">
+    {% block content %}
+    {% endblock %}
+    </div>
+  </body>
+</html>

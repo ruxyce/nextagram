@@ -1,0 +1,13 @@
+{% extends "_layout.html" %}
+
+{% block title %}
+Error |
+{% endblock %}
+
+{% block content %}
+  <div class="error_container">
+    <h1 class="error_text">{{error_header}}</h1>
+    <p class="error_text">{{error_text}}</p>
+  </div>
+
+{% endblock %}

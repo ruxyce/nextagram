@@ -1,0 +1,53 @@
+{% extends '_layout.html' %}
+
+{% block title %}
+New Post
+{% endblock %}
+
+
+{% block content %}
+
+<div class="upload_container">
+
+  <h3 class="display-4 text-center mb-4">New Post</h3>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-secondary" role="alert">
+      {% for message in messages %}
+      <span>{{ message }}</span>
+      {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <form class="mt-2" action="{{ url_for('posts.create') }}" method="POST" enctype="multipart/form-data">
+    <input class="upload_inputfile" type="file" name="user_file" id="file_hide" required>
+    <label for="file_hide">Select Image</label>
+    <input name="caption" class="form-control mt-3" type="text" placeholder="Write a caption (optional, max. 140 chars)">
+    <button class="btn btn-success mt-3 mb-3 btn-block" type="submit">Upload Post</button> 
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+  </form>
+
+  <script>
+        var input = document.getElementById( 'file_hide' );
+
+            var label	 = input.nextElementSibling,
+                labelVal = label.innerHTML;
+
+            input.addEventListener( 'change', function( e )
+            {
+                var fileName = '';
+                    fileName = e.target.value.split("\\").pop();
+
+                if( fileName )
+                    label.innerHTML = fileName;
+                else
+                    label.innerHTML = labelVal;
+            });
+  </script>
+
+
+</div>
+
+{% endblock %}

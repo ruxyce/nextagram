@@ -1,0 +1,49 @@
+{% extends '_user_banner.html' %}
+
+{% block usertab3 %}
+user_page_tab_active
+{% endblock %}
+
+{% block route %}following{% endblock %}
+
+{% block usercontent %}
+
+<div class="container">
+        <div class="row text-center mt-3 mb-5">
+
+{% for rs in user.relationships %}
+
+<div class="col-12 col-md-6 col-xl-4">
+
+    <div class="bg_custom mt-4 mb-1 border_custom mx-2 px-2 py-4 rounded">  
+      <div class="text-center">
+          <a class="text-decoration-none opacity_hover" href="{{ url_for('users.userpage', username=rs.to_user.username) }}">
+            <img class="" src="{{ rs.to_user.avatar_url }}" width="100" height="100" style="object-fit: cover; border-radius: 50%; border: 2px solid grey;">
+          </a>
+          <div class="w-100"></div>
+          <h4 class="ml-2 mt-2"><a class="text_default_link" href="{{ url_for('users.userpage', username=rs.to_user.username) }}">{{rs.to_user.username}}</a></h4>
+          <div class="w-100"></div>
+          {% if current_user.is_authenticated and rs.to_user in following %}
+          <form class="w-100" action="{{ url_for('users.unfollow', id=rs.to_user_id) }}" method="POST">
+            <button class="mt-2 w-75 user_page_ul_button user_page_ul_unfollow" type="submit">Unfollow</button>
+            <input type="hidden" name="next" value="{{ url_for('users.following', username=user.username) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          </form>
+          {% elif current_user.is_authenticated and current_user == rs.to_user %}
+          <button class="mt-2 w-75 btn btn-sm btn-secondary" disabled>You</button>
+          {% else %}
+          <form class="w-100" action="{{ url_for('users.follow', id=rs.to_user_id) }}" method="POST">
+            <button class="mt-2 w-75 user_page_ul_button user_page_ul_follow" type="submit">Follow</button>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="next" value="{{ url_for('users.following', username=user.username) }}">            </form>
+          {% endif %}
+        </div>
+    </div>
+  </div>
+
+{% endfor %}
+
+</div>
+</div>
+
+{% endblock %}
