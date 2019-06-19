@@ -8,19 +8,30 @@ Browse Users |
 
 {% block content %}
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-secondary mb-0" role="alert">
+    {% for message in messages %}
+    <span>{{ message }}</span>
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+
 <div class="container-fluid">
 
-    <div class="w-100 my-4" style="border: 1px solid #F0F0F0;"></div>
+    <div class="w-100 my-1" style="border: 1px solid #F0F0F0;"></div>
 
     {% for user in users %}
     <div class="row text-center">
       <div class="col-12 col-lg-2 offset-lg-1 text-center">
         <div class="w-100 mt-4"></div>
-        <a class="" href="{{ url_for('users.userpage', username=user.username) }}">
+        <a class="" href="{{ url_for('users.show', username=user.username) }}">
           <img class="users_all_avatar" src="{{ user.avatar_url }}" height="128" width="128">
         </a>
         <div class="w-100 mb-1"></div>
-        <a class="text_default_link users_all_username" href="{{ url_for('users.userpage', username=user.username) }}">
+        <a class="text_default_link users_all_username" href="{{ url_for('users.show', username=user.username) }}">
           <p style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">{{ user.username }}</p>
         </a> 
         <div class="w-100 mt-3"></div>
@@ -30,14 +41,14 @@ Browse Users |
               <span class="unfollow_span_1 text-light"><strong>Following</strong></span><span class="unfollow_span_2 text-light"><strong>Unfollow</strong></span>
             </button>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="next" value="{{ url_for('users.all_users') }}">
+            <input type="hidden" name="next" value="{{ url_for('users.index') }}">
           </form>            
         {% elif current_user.is_authenticated and user == current_user %}
           <button class="btn btn-secondary btn-sm w-75 mx-auto mb-3 font-weight-bold" disabled>You</button>
         {%else %}
           <form action="{{ url_for('users.follow', id=user.id) }}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="next" value="{{ url_for('users.all_users') }}">
+            <input type="hidden" name="next" value="{{ url_for('users.index') }}">
             <button type="submit" class="all_users_follow_button w-75 mx-auto mb-3"><strong>Follow</strong></button>
           </form>
         {% endif %}
@@ -46,16 +57,18 @@ Browse Users |
       <div class="col-12 col-lg-8">
         
             {% if user.posts %}
+              {% if not user.is_private or user in following %}
               <div class="container">
                 <div class="row">
                 {% for post in user.posts %}
                   <div class="col-12 col-md-6 col-xl-4 users_all_image_wrapper mt-4 mb-1">
                   
-                  <a href="{{ url_for('posts.post_page', post_id=post.image) }}">
+                  <a href="{{ url_for('posts.show', post_id=post.image) }}">
                     <img class="users_all_image" src="{{ post.image_url }}">
                     <div class="users_all_image_overlay"></div>
-                    <div class="users_all_image_overlay_text d-flex justify-content-center align-items-center">
+                    <div class="users_all_image_overlay_text d-flex flex-column justify-content-center align-items-center">
                       <span class="text-light font-weight-bold"><i class="fas fa-heart"></i> {{ post.likes|length }}</span>
+                      <!-- <span class="text-light font-weight-bold"><i class="far fa-money-bill-alt"></i> $0.00 </span> -->
                     </div>
                   </a>
                     
@@ -63,9 +76,14 @@ Browse Users |
                 {% endfor %}
                 </div>
               </div>
+              {% else %}
+              <div class="d-flex h-100 justify-content-center align-items-center">
+                <p class="text-center cursor_default" style="font-size: 40px;">This user has made their posts private.</p>
+              </div>
+              {% endif %}
             {% else %}
               <div class="d-flex h-100 justify-content-center align-items-center">
-                <p class="lead display-4 text-center">It's empty here :(</p>
+                <p class="text-center cursor_default" style="font-size: 40px;">It's empty here :(</p>
               </div>
             {% endif %}
 

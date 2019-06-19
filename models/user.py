@@ -13,6 +13,7 @@ class User(BaseModel, UserMixin):
     password = pw.CharField(null=False)
     avatar = pw.CharField(default='xk54cw37vcl7yjd')
     about = pw.TextField(null=True)
+    is_private = pw.BooleanField(default=False)
 
     def following(self):
         # query other users through the "relationship" table

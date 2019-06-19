@@ -11,37 +11,37 @@ sessions_blueprint = Blueprint('sessions',
                             template_folder='templates')
 
 @sessions_blueprint.route('/signup', methods=['GET','POST'])
-def signup():
+def signup_bypass_url():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    return render_template('signup.html')
+    return render_template('users/new.html')
 
 @sessions_blueprint.route('/login', methods=['GET','POST'])
-def login():
-    # if current_user.is_authenticated:
-    #     return redirect(url_for('home'))
-    return render_template('login.html')
+def new():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    return render_template('sessions/new.html')
 
 @sessions_blueprint.route('/auth', methods=['POST'])
-def auth():
+def create():
     username = request.form['username'].lower()
     password = request.form['password']
     user = User.get_or_none(User.username == username)
     if not user:
         flash('Invalid username.')
-        return redirect(url_for('sessions.login'))
+        return redirect(url_for('sessions.new'))
     pw_check = check_password_hash(user.password, password)
     if pw_check:
         login_user(user)
         return redirect(url_for('home'))
     else:
         flash('Incorrect password.')
-        return redirect(url_for('sessions.login'))
+        return redirect(url_for('sessions.new'))
 
 @sessions_blueprint.route('/signout', methods=["GET","POST"])
 @login_required
-def signout():
+def delete():
     logout_user()
     flash('Successfully logged out.')
-    return redirect(url_for('sessions.login'))
+    return redirect(url_for('sessions.new'))
 

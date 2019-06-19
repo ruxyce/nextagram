@@ -1,7 +1,7 @@
 {% extends '_layout.html' %}
 
 {% block title %}
-Update Avatar
+Edit Profile
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@ Update Avatar
 
 <div class="upload_container">
 
-    <h3 class="display-4 text-center mb-4">Change Avatar</h3>
+    <h3 class="display-4 text-center mb-4">Edit Profile</h3>
   
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -22,7 +22,7 @@ Update Avatar
       {% endif %}
     {% endwith %}
   
-    <form class="mt-2" action="{{ url_for('profile.upload_avatar') }}" method="POST" enctype="multipart/form-data">
+    <form class="mt-2" action="{{ url_for('users.update') }}" method="POST" enctype="multipart/form-data">
       <input class="upload_inputfile" type="file" name="user_file" id="file_hide" required>
       <label for="file_hide">Select Image</label>
       <button class="btn btn-success mt-3 mb-3 btn-block" type="submit">Upload Image</button> 

@@ -1,4 +1,4 @@
-{% extends '_user_banner.html' %}
+{% extends 'users/_banner.html' %}
 
 {% block usertab2 %}
 user_page_tab_active
@@ -8,9 +8,20 @@ user_page_tab_active
 
 {% block usercontent %}
 
-<div class="container">
-  <div class="row text-center mt-3 mb-5">
 
+
+{% if user.is_private and not user in following %}
+
+<p class="lead text-center mt-5 font-weight-bold px-3 cursor_default">This profile is private.</p>
+<p class="text-center px-5 cursor_default">
+  Only confirmed followers have access to {{ user.username }}'s posts and complete profile.
+  Click the Follow button to send a follow request.
+</p>
+
+{% else %}
+
+<div class="container">
+    <div class="row text-center mt-3 mb-5">
 
 {% for rs in user.related_to %}
 
@@ -18,16 +29,16 @@ user_page_tab_active
 
       <div class="bg_custom mt-4 mb-1 border_custom mx-2 px-2 py-4 rounded">  
         <div class="text-center">
-            <a class="text-decoration-none opacity_hover" href="{{ url_for('users.userpage', username=rs.from_user.username) }}">
+            <a class="text-decoration-none opacity_hover" href="{{ url_for('users.show', username=rs.from_user.username) }}">
               <img class="" src="{{ rs.from_user.avatar_url }}" width="100" height="100" style="object-fit: cover; border-radius: 50%; border: 2px solid grey;">
             </a>
             <div class="w-100"></div>
-            <h4 class="ml-2 mt-2"><a class="text_default_link" href="{{ url_for('users.userpage', username=rs.from_user.username) }}">{{rs.from_user.username}}</a></h4>
+            <h4 class="ml-2 mt-2"><a class="text_default_link" href="{{ url_for('users.show', username=rs.from_user.username) }}">{{rs.from_user.username}}</a></h4>
             <div class="w-100"></div>
             {% if current_user.is_authenticated and rs.from_user in following %}
             <form class="w-100" action="{{ url_for('users.unfollow', id=rs.from_user_id) }}" method="POST">
               <button class="mt-2 w-75 user_page_ul_button user_page_ul_unfollow" type="submit">Unfollow</button>
-              <input type="hidden" name="next" value="{{ url_for('users.followers', username=user.username) }}">
+              <input type="hidden" name="next" value="{{ url_for('users.show_followers', username=user.username) }}">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             </form>
             {% elif current_user.is_authenticated and current_user == rs.from_user %}
@@ -36,16 +47,19 @@ user_page_tab_active
             <form class="w-100" action="{{ url_for('users.follow', id=rs.from_user_id) }}" method="POST">
               <button class="mt-2 w-75 user_page_ul_button user_page_ul_follow" type="submit">Follow</button>
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-              <input type="hidden" name="next" value="{{ url_for('users.followers', username=user.username) }}">            </form>
+              <input type="hidden" name="next" value="{{ url_for('users.show_followers', username=user.username) }}">            </form>
             {% endif %}
           </div>
       </div>
     </div>
 
+  </div>
+</div>
 
 {% endfor %}
 
-</div>
-</div>
+{% endif %}
+
+
 
 {% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'users/_banner.html' %}
+
+{% block usertab1 %}
+user_page_tab_active
+{% endblock %}
+
+{% block route %}userpage{% endblock %}
+
+{% block usercontent %}
+
+{% if user.is_private and not user in following %}
+
+<p class="lead text-center mt-5 font-weight-bold px-3 cursor_default">This profile is private.</p>
+<p class="text-center px-5 cursor_default">
+  Only confirmed followers have access to {{ user.username }}'s posts and complete profile.
+  Click the Follow button to send a follow request.
+</p>
+
+{% else %}
+
+{% endif %}
+
+
+
+{% endblock %}

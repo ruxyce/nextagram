@@ -36,7 +36,7 @@ Sign Up
       <button class="btn btn-success mt-3 mb-3 btn-block" type="submit">Sign Up</button> 
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     </form>
-    <p class="text-center lead mt-3">Already have an account? <a class="text-decoration-none" href="{{ url_for('sessions.login') }}">Sign in</a> instead.</p>
+    <p class="text-center lead mt-3">Already have an account? <a class="text-decoration-none" href="{{ url_for('sessions.new') }}">Sign in</a> instead.</p>
   
   </div>
 

@@ -9,6 +9,7 @@ from models.user import User
 
 import random
 import string
+import math
 
 from helpers import Config, s3
 
@@ -19,31 +20,48 @@ posts_blueprint = Blueprint('posts',
 def allowed_file(file):
     return 'image' in file.content_type
 
-@posts_blueprint.route('/all', methods=['GET'])
-def all_posts():
-    posts = Post.select().order_by(Post.created_at.desc()).limit(10).prefetch(Like)
-    return render_template('all.html', posts=posts)
+# @posts_blueprint.route('/all', methods=['GET'])
+# @login_required
+# def index():
+#     posts = Post.select().order_by(Post.created_at.desc()).limit(10).prefetch(Like)
+#     return render_template('posts/index.html', posts=posts)
 
 @posts_blueprint.route('/feed', methods=['GET'])
 @login_required
-def feed():
+def index():
+    page = request.args.get('page')
     posts = (Post
             .select()
             .where((Post.user.in_(current_user.following())) | (Post.user_id == current_user.id))
-            .order_by(Post.created_at.desc())).prefetch(Like)
-    return render_template('all.html', posts=posts)
+            .order_by(Post.created_at.desc()))
+
+    # add handler for 0 post
+    total_posts = len(posts)
+    posts_per_page = 2
+    pages = math.ceil(total_posts/posts_per_page)
+
+    if not page or not page.isnumeric():
+        page = 1
+
+    page = int(page)
+
+    if page > pages:
+        page = pages
+
+    posts = posts.paginate(page, posts_per_page).prefetch(Like)
+    return render_template('posts/index.html', posts=posts, pages=pages, page=page)
 
 @posts_blueprint.route('/new', methods=['GET','POST'])
 @login_required
 def new():
-    return render_template('new_post.html')
+    return render_template('posts/new.html')
 
 @posts_blueprint.route('/<post_id>', methods=['GET'])
-def post_page(post_id):
+def show(post_id):
     post = Post.get_or_none(Post.image == post_id)
     if post:
         user = User.get(User.id == post.user_id)
-        return render_template('post_page.html', post=post, user=user)
+        return render_template('posts/show.html', post=post, user=user)
     return "Post not found"
 
 @posts_blueprint.route('/like/<post>', methods=['POST'])
@@ -53,7 +71,7 @@ def like(post):
     if not find:
         Like.create(post = post, user = current_user.id)
 
-    return redirect(url_for('posts.all_posts')) 
+    return redirect(url_for('posts.index')) 
 
 @posts_blueprint.route('/unlike/<post>', methods=['POST'])
 @login_required
@@ -62,7 +80,7 @@ def unlike(post):
     if find:
         find.delete_instance()
 
-    return redirect(url_for('posts.all_posts')) 
+    return redirect(url_for('posts.index')) 
 
 @posts_blueprint.route("/create", methods=["POST"])
 @login_required

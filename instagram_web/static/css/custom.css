@@ -236,6 +236,7 @@ color: white;
   text-align: center;
   padding: 15px 12px;
   text-decoration: none;
+  transition: all 0.15s ease-in-out;
 }
 
 /* Change the link color to #111 (black) on hover */
@@ -462,6 +463,85 @@ color: white;
   text-decoration: none;
 }
 
+.text {
+  color: rgb(138, 19, 19);
+}
 .opacity_hover:hover {
   opacity: 0.8;
+}
+
+.cursor_pointer {
+  cursor: pointer;
+}
+
+.cursor_default {
+  cursor: default;
+}
+
+.post_page_container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.post_page_image {
+  max-width: 90%;
+  max-height: 500px;
+  object-fit: contain;
+}
+
+.post_page_headers {
+  font-size: 30px;
+}
+
+.navbar_li_dropdown:hover .navbar_li_dropdown_content {
+  display: block;
+}
+
+.authed_user_sticky_controls {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  height: 100px;
+  width: 100px;
+  background-color: #343a40;
+  color: white;
+  border-radius: 50%;
+  border: 5px solid rgb(240, 240, 240);
+  font-size: 50px;
+  z-index: 1001;
+  transition: all .3s ease-in-out;
+  outline: none;
+}
+
+.authed_user_sticky_controls:hover {
+  background-color: #111111;
+  transform: scale(1.1);
+}
+
+.authed_user_sticky_controls:focus {
+  outline: none;
+}
+
+
+
+.post_buttons {
+
+  height: 60px;
+  width: 250px;
+  background-color: darkgreen;
+  color: white;
+  border-radius: 25px;
+  border: 5px solid rgb(240, 240, 240);
+  font-size: 25px;
+  z-index: 1001;
+  transition: all .3s ease-in-out;
+  outline: none;
+}
+
+.post_buttons:hover {
+  background-color: green;
+}
+
+.post_buttons:focus {
+  outline: none;
 }

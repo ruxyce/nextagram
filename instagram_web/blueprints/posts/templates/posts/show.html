@@ -1,0 +1,43 @@
+{% extends '_layout.html' %}
+
+{% block title %}
+{{ user.username }}'s Post on
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row pt-5 pb-5 d-flex flex-column text-center">
+
+  <!-- <div class="col-4 text-right lead post_page_headers">
+    <p>{{ user.username }}</p>
+    <p>{{ post.when }}</p>
+    <p>{{ post.likes|length }} likes</p>
+    <p>Tip!</p>
+  </div>
+  <div class="col-6 text-left">
+        <img class="post_page_image" src="{{ post.image_url }}">
+  </div>   -->
+
+  <img src="{{ post.image_url }}" style="max-width: 80%; margin: 25px auto;">
+
+  <div class="mx-auto" style="max-width: 500px;">
+    <p class="text-center" style="word-wrap: break-word;">{{ post.caption }}</p>
+  </div>
+  <p class="lead">{{ post.when }} by <a class="text_default_link font-weight-bold" href="{{ url_for('users.show', username=user.username) }}">{{ user.username }}</a></p>
+  
+
+  <div class="text-center">
+ 
+    <button class="post_buttons">
+      <i class="fas fa-dollar-sign"></i> Tip this post!
+    </button>
+ 
+  </div>
+
+
+
+  </div>
+</div>
+
+{% endblock %}

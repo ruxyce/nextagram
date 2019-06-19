@@ -3,8 +3,8 @@ from flask import render_template, session, escape, redirect, url_for
 
 from instagram_web.blueprints.users.views import users_blueprint
 from instagram_web.blueprints.sessions.views import sessions_blueprint
-from instagram_web.blueprints.profile.views import profile_blueprint
 from instagram_web.blueprints.posts.views import posts_blueprint
+from instagram_web.blueprints.donate.views import donate_blueprint
 
 from flask_login import current_user
 
@@ -16,8 +16,8 @@ from flask_login import current_user
 
 app.register_blueprint(users_blueprint, url_prefix="/u")
 app.register_blueprint(sessions_blueprint, url_prefix="/")
-app.register_blueprint(profile_blueprint, url_prefix="/profile")
 app.register_blueprint(posts_blueprint, url_prefix="/p")
+app.register_blueprint(donate_blueprint, url_prefix="/donate")
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -29,6 +29,4 @@ def internal_server_error(e):
 
 @app.route("/")
 def home():
-    if current_user.is_authenticated:
-        return redirect(url_for('posts.feed'))
     return render_template('home.html')
