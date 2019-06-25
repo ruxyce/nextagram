@@ -57,7 +57,8 @@ class User(BaseModel, UserMixin):
 
     def unfollow(self, user_to_unfollow):
         relationship = Relationship.get_or_none(Relationship.from_user == self, Relationship.to_user == user_to_unfollow)
-        relationship.delete_instance()
+        if relationship:
+            relationship.delete_instance()
 
     def set_public(self):
         if self.is_private == False:
