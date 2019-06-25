@@ -336,7 +336,7 @@ def requests():
 @login_required
 def approve(target_user_id):
     current_user.approve(target_user_id)
-    if current_user.follow_requests:
+    if current_user.follower_requests:
         return redirect(url_for('users.requests'))
     return redirect(url_for('users.show', username=current_user.username))
 
@@ -344,7 +344,7 @@ def approve(target_user_id):
 @login_required
 def reject(target_user_id):
     current_user.reject(target_user_id)
-    if current_user.follow_requests:
+    if current_user.follower_requests:
         return redirect(url_for('users.requests'))
     return redirect(url_for('users.show', username=current_user.username))
 

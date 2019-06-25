@@ -8,7 +8,7 @@ Requests
 
 
 
-  {% if current_user.follow_requests %}
+  {% if current_user.follower_requests %}
 
   <div class="upload_container">
 
@@ -17,7 +17,7 @@ Requests
     <div class="container">
       <div class="row">
 
-    {% for request in current_user.follow_requests %}
+    {% for request in current_user.follower_requests %}
 
       <div class="col-12 mb-3 p-3 border_custom rounded">
 
