@@ -16,7 +16,7 @@
   </div>
   <p class="lead">{{ post.when }} by <a class="text_default_link font-weight-bold" href="{{ url_for('users.show', username=user.username) }}">{{ user.username }}</a></p>
   
-
+  {% if current_user.is_authenticated and current_user.id != post.user_id %}
   <div class="text-center">
  
     <form action="{{ url_for('donate.new_checkout') }}" method="POST" id="donation_form">
@@ -24,12 +24,40 @@
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>  
     </form>
 
-    <button form="donation_form" class="post_buttons" type="submit">
+    <button form="donation_form" class="post_buttons post_tip_button" type="submit">
       <i class="fas fa-dollar-sign"></i> Tip this user!
     </button>
  
   </div>
+  {% elif current_user.is_authenticated and current_user.id == post.user_id %}
+  <div class="text-center">
+    <button class="post_buttons post_page_delete_button" data-toggle="modal" data-target="#remove_{{ post.image }}">Delete Post</button>
+  </div>
 
+  <div class="modal fade" id="remove_{{ post.image }}" tabindex="-1" role="dialog" aria-labelledby="removePost" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content pb-4 text-center">
+          <div class="modal-header">
+            <h5 class="modal-title cursor_default" id="remove_{{ post.image }}">Delete Post</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body cursor_default">
+              <p class="mt-2">Confirm delete post?</p>
+          </div>
+
+          <form action="{{ url_for('posts.delete', post_id=post.image) }}" method="POST">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+              <button type="button" class="btn btn-secondary mx-1" data-dismiss="modal" style="width: 33%;">Close</button>
+              <button type="submit" class="btn btn-danger mx-1" style="width: 33%;">Delete</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+  {% endif %}
 
 
   </div>

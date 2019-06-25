@@ -27,16 +27,49 @@ user_page_tab_active
 
         {% for post in user.posts %}
           <div class="col-12 col-md-6 col-xl-4 users_all_image_wrapper mt-4 mb-1">
-          
+
+            {% if user == current_user %}
+              <button class="post_delete_button" data-toggle="modal" data-target="#remove_{{ post.image }}"><i class="far fa-trash-alt"></i></button>
+            {% endif %}
+
+
+          {% if user == current_user %}
           <a href="{{ url_for('posts.show', post_id=post.image) }}">
+          {% else %}
+          <a href="{{ url_for('posts.show', post_id=post.image) }}">
+          {% endif %}
             <img class="users_all_image" src="{{ post.image_url }}">
             <div class="users_all_image_overlay"></div>
             <div class="users_all_image_overlay_text d-flex flex-column justify-content-center align-items-center">
               <span class="text-light font-weight-bold"><i class="fas fa-heart"></i> {{ post.likes|length }}</span>
-              <!-- <span class="text-light font-weight-bold"><i class="far fa-money-bill-alt"></i> $0.00 </span> -->
+
+
             </div>
           </a>
-            
+          {% if user == current_user %}
+          <div class="modal fade" id="remove_{{ post.image }}" tabindex="-1" role="dialog" aria-labelledby="removePost" aria-hidden="true">
+              <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content pb-4 text-center">
+                  <div class="modal-header">
+                    <h5 class="modal-title cursor_default" id="remove_{{ post.image }}">Delete Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body cursor_default">
+                      <p class="mt-2">Confirm delete post?</p>
+                  </div>
+
+                  <form action="{{ url_for('posts.delete', post_id=post.image) }}" method="POST">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                      <button type="button" class="btn btn-secondary mx-1" data-dismiss="modal" style="width: 33%;">Close</button>
+                      <button type="submit" class="btn btn-danger mx-1" style="width: 33%;">Delete</button>
+                  </form>
+
+                </div>
+              </div>
+            </div>
+            {% endif %}
           </div>
         {% endfor %}
 

@@ -534,25 +534,35 @@ body, html {
 
 
 .post_buttons {
-
-  height: 60px;
-  width: 250px;
-  background-color: darkgreen;
+  height: 50px;
+  width: 180px;
   color: white;
   border-radius: 25px;
   border: 5px solid rgb(240, 240, 240);
-  font-size: 25px;
+  font-size: 20px;
   z-index: 1001;
   transition: all .3s ease-in-out;
   outline: none;
 }
 
-.post_buttons:hover {
+.post_tip_button {
+  background-color: darkgreen;
+}
+
+.post_tip_button:hover {
   background-color: green;
 }
 
 .post_buttons:focus {
   outline: none;
+}
+
+.post_page_delete_button {
+  background-color: darkred;
+}
+
+.post_page_delete_button:hover {
+  background-color: crimson;
 }
 
 .no_outline {
@@ -583,4 +593,24 @@ body, html {
 
 .google_oauth_button:hover {
   opacity: 1.0;
+}
+
+.post_delete_button {
+  position: absolute; 
+  top: 20px; 
+  right: 35px;
+  background-color: transparent;
+  outline: none;
+  font-size: 35px;
+  border: none;
+  color: white;
+  z-index: 1002;
+}
+
+.post_delete_button:hover {
+  color: crimson;
+}
+
+.post_delete_button:focus {
+  outline: none;
 }

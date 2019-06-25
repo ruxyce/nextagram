@@ -135,3 +135,11 @@ def create():
 
     else:
         return redirect("/")
+
+@posts_blueprint.route("/delete/<post_id>", methods=['POST'])
+@login_required
+def delete(post_id):
+    post = Post.get_or_none(Post.image == post_id) 
+    if post and post.user_id == current_user.id:
+        post.delete_instance()
+    return redirect(url_for('users.show', username=current_user.username))
