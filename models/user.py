@@ -11,7 +11,7 @@ class User(BaseModel, UserMixin):
     email = pw.CharField(null=False, unique=True)
     username = pw.CharField(null=False, unique=True)
     password = pw.CharField(null=False)
-    avatar = pw.CharField(default='xk54cw37vcl7yjd')
+    avatar = pw.CharField(default='x8aeubacxt9jjds')
     about = pw.TextField(null=True)
     is_private = pw.BooleanField(default=False)
 
