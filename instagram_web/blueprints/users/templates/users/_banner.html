@@ -4,6 +4,11 @@
 {{user.username}}'s Profile
 {% endblock %}
 
+{% block header %}
+    <meta charset="utf-8">
+    <script src="https://js.braintreegateway.com/web/dropin/1.18.0/js/dropin.min.js"></script>
+{% endblock %}
+
 {% block content %}
 
 {% with messages = get_flashed_messages() %}
@@ -23,27 +28,39 @@
 
 <div class="text-center mb-3 mx-auto" style="max-width: 500px;">
 {% if current_user.is_authenticated and current_user in user.followers() %}
-    <form action="{{ url_for('users.unfollow', id=user.id) }}" method="POST" id="unfollow_form">
+    <form action="{{ url_for('users.unfollow', user_id=user.id) }}" method="POST" id="unfollow_form">
       <input type="hidden" name="next" value="{{ url_for('users.show', username=user.username) }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     </form>
-    <button class="following-button user_page_ul_button user_page_ul_unfollow w-50" form="unfollow_form" value="Submit">
-      <!-- <span id="following-span-1">Following</span> -->
-      <span id="following-span-2">Unfollow</span>
+    <button class="following-button user_page_ul_button user_page_ul_unfollow width_banner_button" form="unfollow_form" value="Submit">
+      <span class="unfollow_span_1 text-light">Following</span>
+      <span class="unfollow_span_2 text-light">Unfollow</span>
     </button>
 {% elif current_user.is_authenticated and current_user == user %}
       <form action="{{ url_for('users.edit') }}" method="GET" id="edit_form">
         <!-- <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> -->
       </form>
-      <button class="btn btn-sm btn-success w-50" form="edit_form" value="Submit">Change Avatar</button>
+      <button class="btn btn-sm btn-success width_banner_button" form="edit_form" value="Submit">Edit Profile</button>
 {% else %}
-      <form action="{{ url_for('users.follow', id=user.id) }}" method="POST" id="follow_form">
+      <form action="{{ url_for('users.follow', user_id=user.id) }}" method="POST" id="follow_form">
         <input type="hidden" name="next" value="{{ url_for('users.show', username=user.username) }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
       </form>
-      <button class="user_page_ul_button user_page_ul_follow w-50" form="follow_form" value="Submit">Follow</button>
+      <button class="user_page_ul_button user_page_ul_follow width_banner_button" form="follow_form" value="Submit">Follow</button>
 {% endif %}
+      <button form="donation_form" class="btn btn-sm btn-success width_banner_button" type="submit">
+        Make Donation
+      </button>
+      <form action="{{ url_for('donate.new_checkout') }}" method="POST" id="donation_form">
+        <input type="hidden" name="user_id" value="{{ user.id }}" />
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>  
+      </form>
+
 </div>
+
+
+
+
 
 <div class="d-flex justify-content-center align-items-center">
     <div class="px-3 {% block usertab1 %} {% endblock %}">
@@ -55,14 +72,14 @@
       </div>
   <div class="px-3 border-left border-right {% block usertab2 %} {% endblock %}">
     <a class="text-decoration-none user_page_stat" href="{{ url_for('users.show_followers', username=user.username) }}">
-      <span class="text-dark lead d-block text-center user_page_stat_number">{{ user.related_to|length }}</span>
-      <span class="text-dark lead d-block text-center">Follower{% if user.related_to|length != 1 %}s{% endif %}</span>
+      <span class="text-dark lead d-block text-center user_page_stat_number">{{ u_followers|length }}</span>
+      <span class="text-dark lead d-block text-center">Follower{% if u_followers|length != 1 %}s{% endif %}</span>
     </a>
     <div class="user_page_tab_bottom"></div>
   </div>
   <div class="px-3 {% block usertab3 %} {% endblock %}">
       <a class="text-decoration-none user_page_stat" href="{{ url_for('users.show_following', username=user.username) }}">
-        <span class="text-dark lead d-block text-center user_page_stat_number">{{ user.relationships|length }}</span>
+        <span class="text-dark lead d-block text-center user_page_stat_number">{{ u_followings|length }}</span>
         <span class="text-dark lead d-block text-center">Following</span>
       </a>
       <div class="user_page_tab_bottom"></div>

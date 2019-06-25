@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.ico') }}">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/all.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-    {% block header %}{% endblock %}
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.ico') }}">
+      {% assets "home_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+      {% endassets %}
+      {% assets "home_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+      {% endassets %}
+      {% block header %}
+      {% endblock %}
     <title>{% block title %}{% endblock %}( ͡o ͜ʖ ͡o)</title>
   </head>
   <body>
@@ -24,7 +22,7 @@
           <ul class="navbar_ul">
             <li class="navbar_li navbar_li_left">
               <a class="navbar_li_a" href="{{ url_for('home') }}">
-                {{ ['( ͡o ͜ʖ ͡o)','( ´･ω･)']|random }}
+                {{ ['( ͡o ͜ʖ ͡o)','( ´･ω･)']|random }} Nextagram
               </a>
             </li>
             <!-- <li class="navbar_li navbar_li_left"><a class="navbar_li_a" href="{{ url_for('posts.index') }}"><i class="fas fa-check-double"></i> All</a></li> -->
@@ -47,8 +45,8 @@
                 <a class="nav-link dropdown-toggle bg-dark text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&nbsp;&nbsp;&nbsp; My Account</a>
                 <div class="dropdown-menu bg-dark text-light" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item bg-dark text-light" href="{{ url_for('users.show',username=current_user.username) }}">Go to Profile Page</a>
-                  <a class="dropdown-item bg-dark text-light" href="#">Edit Account Details</a>
-                  <a class="dropdown-item bg-dark text-light" href="{{ url_for('users.edit') }}">Edit Avatar</a>
+                  <a class="dropdown-item bg-dark text-light" href="{{ url_for('users.edit') }}">Edit Account Details</a>
+                  <a class="dropdown-item bg-dark text-light" href="{{ url_for('users.edit_avatar') }}">Edit Avatar</a>
                 </div>
               </li>
               <li class="nav-item"><a class="nav-link bg-dark text-light" href="{{ url_for('sessions.delete') }}">&nbsp;&nbsp;&nbsp; Sign Out</a></li>
@@ -61,22 +59,28 @@
             {% endif %}
           </div>
 
+          <form action="{{ url_for('users.search') }}" class="ml-auto d-none d-md-block">
+            <input class="navbar_search_input" name="q" type="search" value="{{ term }}" placeholder="Search Users...">
+          </form>
+
             {% if current_user.is_authenticated %}
 
-            <form action="{{ url_for('users.search') }}" class="ml-auto d-none d-md-block">
-              <input class="navbar_search_input" name="q" type="search" placeholder="Search Users...">
-            </form>
+
             <ul class="navbar_ul d-none d-md-block">
 
               <li class="navbar_li navbar_li_right">
                 <a class="navbar_li_a pr-3" href="#" id="navbarDropdownButton" data-toggle="dropdown">
                   <img src="{{ current_user.avatar_url }}" width="30" height="30" style="border:2px solid white;border-radius:50%;position:relative;top:-3px;margin-right:4px; object-fit: cover;">
-                  <span style="position:relative;top:-1px;">{{ current_user.username }}&nbsp; {% if True %}<span class="badge badge-secondary">1</span>&nbsp;{% endif %} <i class="fas fa-caret-down"></i></span>
+                  <span style="position:relative;top:-1px;">{{ current_user.username }}&nbsp; {% if current_user.follower_requests %}<span class="badge badge-secondary">{{ current_user.follower_requests|length }}</span>&nbsp;{% endif %} <i class="fas fa-caret-down"></i></span>
                   <!-- <span class="badge badge-secondary">1</span>&nbsp; <i class="fas fa-caret-down"></i> -->
                 </a>
                 <div class="dropdown-menu dropdown-menu-right mt-0 bg-dark" aria-labelledby="navbarDropdownButton">
+                  <a class="dropdown-item text-light bg-dark" href="{{ url_for('users.show', username=current_user.username) }}">Go to Profile</a>
                   <a class="dropdown-item text-light bg-dark" href="{{ url_for('users.edit') }}">Edit Account Details</a>
-                  <a class="dropdown-item text-light bg-dark" href="{{ url_for('users.requests') }}">Follow Requests <span class="badge badge-secondary">1</span></a>
+                  <a class="dropdown-item text-light bg-dark" href="{{ url_for('users.edit_avatar') }}">Edit Profile Image</a>
+                  {% if current_user.follower_requests %}
+                    <a class="dropdown-item text-light bg-dark" href="{{ url_for('users.requests') }}">Follow Requests <span class="badge badge-secondary">{{ current_user.follower_requests|length }}</span></a>
+                  {% endif %}
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item text-light bg-dark" href="{{ url_for('sessions.delete') }}">Sign Out</a>
                 </div>
@@ -114,7 +118,6 @@
     <div class="">
       <form action="{{ url_for('posts.new') }}" method="GET">
       <button type="submit" class="authed_user_sticky_controls d-none d-md-block" data-toggle="tooltip" data-placement="left" title="New Post">
-        <!-- <i class="far fa-file"></i> -->
         <i class="fas fa-plus"></i>
       </button>
       </form>

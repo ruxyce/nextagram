@@ -8,7 +8,7 @@ user_page_tab_active
 
 {% block usercontent %}
 
-{% if user.is_private and not user in following %}
+{% if user.is_private and not user in following and user != current_user %}
 
 <p class="lead text-center mt-5 font-weight-bold px-3 cursor_default">This profile is private.</p>
 <p class="text-center px-5 cursor_default">
@@ -17,6 +17,39 @@ user_page_tab_active
 </p>
 
 {% else %}
+
+
+{% if user.posts %}
+<div class="container-fluid">
+  <div class="row pt-3 pb-5 px-3 px-sm-4 px-md-5">
+
+      
+
+        {% for post in user.posts %}
+          <div class="col-12 col-md-6 col-xl-4 users_all_image_wrapper mt-4 mb-1">
+          
+          <a href="{{ url_for('posts.show', post_id=post.image) }}">
+            <img class="users_all_image" src="{{ post.image_url }}">
+            <div class="users_all_image_overlay"></div>
+            <div class="users_all_image_overlay_text d-flex flex-column justify-content-center align-items-center">
+              <span class="text-light font-weight-bold"><i class="fas fa-heart"></i> {{ post.likes|length }}</span>
+              <!-- <span class="text-light font-weight-bold"><i class="far fa-money-bill-alt"></i> $0.00 </span> -->
+            </div>
+          </a>
+            
+          </div>
+        {% endfor %}
+
+
+
+  </div>
+</div>
+
+{% else %}
+<div class="text-center pt-5">
+  <p class="text-center cursor_default text-dark" style="font-size: 30px;">It's empty here :(</p>
+</div>
+{% endif %}
 
 {% endif %}
 

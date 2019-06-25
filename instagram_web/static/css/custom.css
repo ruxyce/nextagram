@@ -42,10 +42,6 @@ body, html {
   flex-direction: column;
 }
   
-.error_text {
-color: white;
-}
-
 .xyz_avatar {
   height: 128px;
   width: 128px;
@@ -315,7 +311,6 @@ color: white;
 }
 
 .upload_inputfile + label {
-  font-weight: 700;
   color: white;
   background-color: #343a40;
   border: 2px solid silver;
@@ -325,6 +320,8 @@ color: white;
   cursor: pointer;
   word-wrap: break-word;
   max-width: 100%;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
 }
 
 .upload_inputfile:focus + label,
@@ -348,12 +345,14 @@ color: white;
   border: 1px solid grey;
   background-color: darkorchid;
   color: white;
+  transition: all 0.15s ease-in-out;
 }
 
 .all_users_unfollow_button {
   border: white;
   background-color: rgba(37, 33, 33, 0.671);
   color: white;
+  transition: all 0.15s ease-in-out;
 }
 
 .all_users_unfollow_button:hover {
@@ -385,16 +384,26 @@ color: white;
   border: white;
   background-color: rgba(37, 33, 33, 0.671);
   color: white;  
+  transition: all 0.15s ease-in-out;
 }
 
 .user_page_ul_unfollow:hover {
   background-color:crimson;
 }
 
+.user_page_ul_unfollow:hover .unfollow_span_2 {
+  display: inline;
+}
+
+.user_page_ul_unfollow:hover .unfollow_span_1 {
+  display: none;
+}
+
 .user_page_ul_follow {
   border: 1px solid grey;
   background-color: darkorchid;
   color: white;
+  transition: all 0.15s ease-in-out;
 }
 .user_page_ul_follow:hover {
   background-color: purple;
@@ -437,7 +446,6 @@ color: white;
 
 .user_page_ul_button {
     display: inline-block;
-    font-weight: bold;
     text-align: center;
     vertical-align: middle;
     -webkit-user-select: none;
@@ -448,6 +456,7 @@ color: white;
     font-size: 0.875rem;
     height: 2.3em;
     border-radius: 0.2rem;
+    transition: all 0.15s ease-in-out;
 }
 
 .border_custom {
@@ -544,4 +553,34 @@ color: white;
 
 .post_buttons:focus {
   outline: none;
+}
+
+.no_outline {
+  outline: none;
+}
+
+.no_outline:focus {
+  outline: none;
+}
+
+.width_banner_button {
+  width: 140px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.google_oauth_button {
+  background-color: transparent;
+  border: none;
+  background-image: url(../image/btn_google_signin_dark_pressed_web@2x.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 56px;
+  width: 232px;
+  transition: all 0.15s ease-in-out;
+  opacity: 0.8;
+}
+
+.google_oauth_button:hover {
+  opacity: 1.0;
 }

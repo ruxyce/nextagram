@@ -8,7 +8,7 @@ All Posts
 
 {% with messages = get_flashed_messages() %}
   {% if messages %}
-    <div class="alert alert-secondary mb-0" role="alert">
+    <div class="text-center alert alert-secondary mb-0" role="alert">
     {% for message in messages %}
     <span>{{ message }}</span>
     {% endfor %}
@@ -33,6 +33,7 @@ All Posts
                 <a class="page-link text-light {% if page == x %}bg-secondary{% else %}bg-dark{% endif %}" href="{{ url_for('posts.index') }}?page={{x}}">{{x}}</a>
               </li>
             {% endfor %}
+            
           {% else %}
             {% if (page-2) < 1 %}
               {% for x in range(1, 6) %}
@@ -61,9 +62,17 @@ All Posts
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>
+          
         </ul>
     </nav>
     </div>
+
+{% else %}
+
+<div class="d-flex flex-column justify-content-center align-items-center cursor_default" style="height: 85vh;">
+  <p class="mx-5 lead text-center" style="font-size: 30px;">No posts to display.</p>
+  <a href="{{ url_for('users.index') }}" class="mx-5 lead text-center text-decoration-none" style="font-size: 30px;">Start following more users!</a>
+</div>
 
 {% endif %}
 
@@ -88,7 +97,7 @@ All Posts
                 <!-- <a class="dropdown-item" href="#"><i class="far fa-money-bill-alt"></i> Tip Post</a> -->
                 {% if post.user_id != current_user.id %}
                 <div class="dropdown-divider"></div>
-                <form action="{{ url_for('users.unfollow', id=post.user_id) }}" method="POST">
+                <form action="{{ url_for('users.unfollow', user_id=post.user_id) }}" method="POST">
                   <input type="hidden" name="next" value="{{ url_for('posts.index') }}">
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                   <button type="submit" class="dropdown-item" href="#"><i class="fas fa-user-slash"></i> Unfollow {{ post.user.username }}</button>
@@ -105,29 +114,31 @@ All Posts
                 <form class="like_buttons_form" action="{{ url_for('posts.unlike', post=post.id) }}" method="POST">
                   <button class="button_unlike" type="Submit"><i class="fas fa-heart"></i></button>
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                  <input type="hidden" name="next" value="{{ url_for('posts.index') }}?page={{page}}" />
                 </form>
               {% else %}
                 <form class="like_buttons_form" action="{{ url_for('posts.like', post=post.id) }}" method="POST">
                   <button class="button_like" type="Submit"><i class="far fa-heart"></i></button>
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                  <input type="hidden" name="next" value="{{ url_for('posts.index') }}?page={{page}}" />
                 </form>
               {% endif %}
               {% if post.likes|length %}
                 {% if current_user.is_authenticated %}
                   {% if post.is_liked(current_user) %}
                     {% if post.likes|length > 1 %}
-                      <span>You and {{ post.likes|length-1 }} other coder{% if post.likes|length > 2 %}s{% endif %} like this.</span>
+                      <span>You and {{ post.likes|length-1 }} other user{% if post.likes|length > 2 %}s{% endif %} like this.</span>
                     {% else %}
                       <span>You like this.</span>
                     {% endif %}
                   {% else %}
-                    <span>Liked by {{ post.likes|length }} coder{% if post.likes|length > 1 %}s{% endif %}.</span>
+                    <span>Liked by {{ post.likes|length }} user{% if post.likes|length > 1 %}s{% endif %}.</span>
                   {% endif %}
                 {% else %}
-                  <span>Liked by {{ post.likes|length }} coder{% if post.likes|length > 1 %}s{% endif %}.</span>
+                  <span>Liked by {{ post.likes|length }} user{% if post.likes|length > 1 %}s{% endif %}.</span>
                 {% endif %}
               {% else %}
-                <span>Be the first coder to like this post!</span>
+                <span>Be the first to like this post!</span>
               {% endif %}
             </div>
 
@@ -183,6 +194,7 @@ All Posts
             {% endif %}
           {% endif %}
 
+          
 
           <li class="page-item {% if page == pages %}disabled{% endif %}">
             <a class="page-link text-light {% if page == pages %}bg-secondary{% else %}bg-dark{% endif %}" href="{{ url_for('posts.index') }}?page={{pages}}" aria-label="Next">
@@ -194,5 +206,7 @@ All Posts
     </div>
 
 {% endif %}
+
+
 
 {% endblock %}

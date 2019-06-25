@@ -71,7 +71,10 @@ def like(post):
     if not find:
         Like.create(post = post, user = current_user.id)
 
-    return redirect(url_for('posts.index')) 
+    if 'next' in request.form:
+        return redirect(request.form['next'])
+
+    return redirect(url_for('posts.index'))
 
 @posts_blueprint.route('/unlike/<post>', methods=['POST'])
 @login_required
@@ -80,7 +83,10 @@ def unlike(post):
     if find:
         find.delete_instance()
 
-    return redirect(url_for('posts.index')) 
+    if 'next' in request.form:
+        return redirect(request.form['next'])
+
+    return redirect(url_for('posts.index'))
 
 @posts_blueprint.route("/create", methods=["POST"])
 @login_required

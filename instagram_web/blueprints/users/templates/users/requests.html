@@ -1,0 +1,66 @@
+{% extends '_layout.html' %}
+
+{% block title %}
+Requests
+{% endblock %}
+
+{% block content %}
+
+
+
+  {% if current_user.follow_requests %}
+
+  <div class="upload_container">
+
+    <h3 class="display-4 text-center mb-4 cursor_default">Requests</h3>
+
+    <div class="container">
+      <div class="row">
+
+    {% for request in current_user.follow_requests %}
+
+      <div class="col-12 mb-3 p-3 border_custom rounded">
+
+      <div class="container-fluid">
+        <div class="row">
+
+      <div class="col-12 mb-3 d-flex align-items-center">
+
+        <a href="{{ url_for('users.show', username=request.username) }}">
+          <img class="ml-2" src="{{ request.avatar_url }}" width="75px" height="75px" style="object-fit: cover; border-radius: 50%; border: 2px solid grey;">
+        </a>
+        <a href="{{ url_for('users.show', username=request.username) }}" class="text_default_link font-weight-bold ml-3" style="font-size: 22px;">{{ request.username }}</a>
+      </div>
+
+      <div class="col-6">
+        <form action="{{ url_for('users.approve', target_user_id=request.id) }}" method="POST">
+          <button type="submit" class="w-100 btn btn-success rounded-pill"><span class="lead py-0" style="font-size:18px;">Approve</span></button>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        </form>
+      </div>
+ 
+      <div class="col-6">
+        <form action="{{ url_for('users.reject', target_user_id=request.id) }}" method="POST">
+          <button type="submit" class="w-100 btn btn-danger rounded-pill"><span class="lead py-0" style="font-size:18px;">Reject</span></button>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        </form>
+      </div>
+
+      </div>
+      </div>
+      </div>
+        {% endfor %}
+
+    </div>
+    </div>
+
+    <form class="mt-2 text-center" action="{{ url_for('users.approve_all') }}" method="POST">
+      <button type="submit" class="btn btn-success rounded-pill" style="width: 200px;"><span class="lead">Approve All</span></button>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+
+  </div>
+
+  {% endif %}
+
+{% endblock %}

@@ -12,7 +12,7 @@ Sign Up
   
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-        <div class="alert alert-light" role="alert">
+        <div class="alert alert-secondary" role="alert">
         {% for message in messages %}
         <span>{{ message }}</span>
         {% endfor %}
@@ -31,12 +31,12 @@ Sign Up
       </small>
       <input name="password" class="form-control mt-2" type="password" placeholder="Password" required>
       <small class="form-text text-muted">
-          Your password must be 8-20 characters long, can only contain letters and numbers, and must include a combination of "your" and "mom".
+          Your password must be 8-20 characters long and can only contain letters and numbers.
       </small>
       <button class="btn btn-success mt-3 mb-3 btn-block" type="submit">Sign Up</button> 
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     </form>
-    <p class="text-center lead mt-3">Already have an account? <a class="text-decoration-none" href="{{ url_for('sessions.new') }}">Sign in</a> instead.</p>
+    <p class="text-center lead mt-3">Already have an account? <a class="text-decoration-none font-weight-bold" href="{{ url_for('sessions.new') }}">Sign in instead.</a></p>
   
   </div>
 

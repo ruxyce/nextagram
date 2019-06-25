@@ -10,11 +10,11 @@ Edit Profile
 
 <div class="upload_container">
 
-    <h3 class="display-4 text-center mb-4">Edit Profile</h3>
+    <h3 class="display-4 text-center mb-4 cursor_default">Edit Details</h3>
   
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-        <div class="alert alert-secondary" role="alert">
+        <div class="alert alert-secondary cursor_default" role="alert">
         {% for message in messages %}
         <span>{{ message }}</span>
         {% endfor %}
@@ -22,30 +22,69 @@ Edit Profile
       {% endif %}
     {% endwith %}
   
-    <form class="mt-2" action="{{ url_for('users.update') }}" method="POST" enctype="multipart/form-data">
-      <input class="upload_inputfile" type="file" name="user_file" id="file_hide" required>
-      <label for="file_hide">Select Image</label>
-      <button class="btn btn-success mt-3 mb-3 btn-block" type="submit">Upload Image</button> 
+    <form action="{{ url_for('users.update') }}" method="POST">
+      <div class="form-group row">
+        <label for="edit_username" class="col-sm-5 col-form-label" style="font-size: 18px;">Username:</label>
+        <div class="col-sm-7">
+          <input name="username" type="text" class="form-control" id="edit_username" value={{current_user.username}} placeholder="Required" autofocus>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="edit_email" class="col-sm-5 col-form-label" style="font-size: 18px;">Email Address:</label>
+        <div class="col-sm-7">
+          <input name="email" type="email" class="form-control" id="edit_email" value={{current_user.email}} placeholder="Required">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="edit_password" class="col-sm-5 col-form-label" style="font-size: 18px;">New Password:</label>
+        <div class="col-sm-7">
+          <input name="password" type="password" class="form-control" id="edit_password" placeholder="Leave blank to maintain.">
+        </div>
+      </div>
+
+      <div class="w-100 border"></div>
+
+      <div class="form-group row pt-3">
+        {% if current_user.is_private %}
+        <div class="col-sm-8 cursor_default" style="font-size: 18px;">Your profile is currently private.</div>
+        <div class="col-sm-4">
+          <div class="form-check">
+            <input class="form-check-input cursor_pointer" name="set_public" type="checkbox" id="set_public" style="margin-top: 7px;">
+            <label class="form-check-label cursor_pointer" for="set_public" style="font-size: 18px;">
+              Set public
+            </label>
+          </div>
+        </div>
+        <div class="col-sm-12 cursor_default mt-2" style="font-size: 16px;">If changed, all pending requests will be approved.</div>
+        {% else %}
+        <div class="col-sm-8 cursor_default" style="font-size: 18px;">Your profile is currently public.</div>
+        <div class="col-sm-4">
+          <div class="form-check">
+            <input class="form-check-input cursor_pointer" name="set_private" type="checkbox" id="set_private" style="margin-top: 7px;">
+            <label class="form-check-label cursor_pointer" for="set_private" style="font-size: 18px;">
+              Set private
+            </label>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+     
+      <div class="w-100 border"></div>
+
+      <p class="pt-3 cursor_default" style="font-size: 18px;">Please verify your identity (required):</p>
+      <div class="form-group row">
+        <label for="verify_password" class="col-sm-5 col-form-label" style="font-size: 18px;">Current Password:</label>
+        <div class="col-sm-7">
+          <input name="verify_password" type="password" class="form-control" id="verify_password">
+        </div>
+      </div>
+
+      <button class="btn btn-success mt-3 mb-3 btn-block" type="submit">Save Changes</button> 
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+
     </form>
-  
-    <script>
-          var input = document.getElementById( 'file_hide' );
-  
-              var label	 = input.nextElementSibling,
-                  labelVal = label.innerHTML;
-  
-              input.addEventListener( 'change', function( e )
-              {
-                  var fileName = '';
-                      fileName = e.target.value.split("\\").pop();
-  
-                  if( fileName )
-                      label.innerHTML = fileName;
-                  else
-                      label.innerHTML = labelVal;
-              });
-    </script>
+
   
   
   </div>

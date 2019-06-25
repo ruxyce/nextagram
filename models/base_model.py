@@ -15,6 +15,8 @@ class BaseModel(pw.Model):
             self.updated_at = datetime.datetime.now()
             return super(BaseModel, self).save(*args, **kwargs)
         else:
+            for error in self.errors:
+                print(error)
             return 0
 
     def validate(self):

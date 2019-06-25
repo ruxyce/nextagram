@@ -23,10 +23,17 @@ Sign in
   <form class="mt-2" action="{{ url_for('sessions.create') }}" method="POST">
     <input name="username" class="form-control username_lowercase" type="text" placeholder="Username" autofocus required>
     <input name="password" class="form-control mt-2" type="password" placeholder="Password" required>
-    <button class="btn btn-primary mt-3 mb-3 btn-block" type="submit">Login</button> 
+    <button class="btn btn-primary mt-3 mb-3 btn-block" type="submit">Login</button>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   </form>
-  <p class="text-center lead mt-3">Don't have an account? <a class="text-decoration-none" href="{{ url_for('users.new') }}">Sign up</a> now!</p>
+  <form class="mt-2 text-center" action="{{ url_for('sessions.oauth_login') }}" method="POST">
+    <p class="lead text-center">...or sign in using the following:</p>
+    <button type="submit" class="google_oauth_button">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </button>
+  </form>
+
+  <p class="text-center lead mt-3">Don't have an account? <a class="text-decoration-none font-weight-bold" href="{{ url_for('users.new') }}">Sign up now!</a></p>
 
 </div>
 

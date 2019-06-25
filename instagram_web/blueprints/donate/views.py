@@ -4,6 +4,8 @@ from flask_login import current_user
 
 from helpers import gateway
 
+from models.user import User
+
 import braintree
 
 donate_blueprint = Blueprint('donate',
@@ -23,7 +25,7 @@ TRANSACTION_SUCCESS_STATUSES = [
 @donate_blueprint.route('/process', methods=['POST'])
 def create_checkout():
     result = gateway.transaction.sale({
-        'amount': request.form['amount'],
+        'amount': int(request.form['amount'])+1,
         'payment_method_nonce': request.form['payment_method_nonce'],
         # 'options': {
         #     "submit_for_settlement": True
@@ -46,12 +48,20 @@ def create_checkout():
 
     return "WIP"
 
-@donate_blueprint.route("/new", methods=["GET"])
+@donate_blueprint.route("/new", methods=["POST"])
 def new_checkout():
+    user = User.get_or_none(User.id == request.form['user_id'])
+    if not user:
+        return redirect(url_for('home'))
+
     client_token = gateway.client_token.generate()
+    
     return render_template('donate/form.html', 
+        user=user,
         client_token=client_token,
     )
+
+
 
 @donate_blueprint.route("/receipt/<transaction_id>", methods=["GET"])
 def show_checkout(transaction_id):
