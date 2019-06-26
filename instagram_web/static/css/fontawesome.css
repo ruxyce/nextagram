@@ -72,6 +72,9 @@ readers do not read off random characters that represent icons */
 .fa-users:before {
   content: "\f0c0"; }
 
+.fa-user-lock:before {
+  content: "\f502"; }
+
 .fa-user-slash:before {
   content: "\f506"; }
 

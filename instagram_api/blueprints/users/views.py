@@ -123,7 +123,6 @@ def follow(user_id):
         { "my_following": { "approved": approved, "pending": pending } }
     )
 
-
 @users_api_blueprint.route('/unfollow/<user_id>', methods=['POST'])
 @jwt_required
 def unfollow(user_id):

@@ -11,10 +11,9 @@ user_page_tab_active
 
 {% if user.is_private and not user in following and user != current_user %}
 
-<p class="lead text-center mt-5 font-weight-bold px-3 cursor_default">This profile is private.</p>
-<p class="text-center px-5 cursor_default">
+<p style="font-size: 25px;" class="lead text-center mt-5 font-weight-bold px-3 cursor_default"><i class="fas fa-user-lock"></i>&nbsp;&nbsp;This profile is private.</p>
+<p class="text-center px-5 cursor_default lead">
   Only confirmed followers have access to {{ user.username }}'s posts and complete profile.
-  Click the Follow button to send a follow request.
 </p>
 
 {% else %}

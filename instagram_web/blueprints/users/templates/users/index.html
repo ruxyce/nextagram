@@ -79,12 +79,12 @@ Browse Users |
             </div>
           {% else %}
             <div class="d-flex h-100 justify-content-center align-items-center">
-              <p class="text-center cursor_default" style="font-size: 40px;">It's empty here :(</p>
+              <p class="text-center cursor_default lead mt-3" style="font-size: 30px;">It's empty here :(</p>
             </div>
           {% endif %}
         {% else %}
           <div class="d-flex h-100 justify-content-center align-items-center">
-            <p class="text-center cursor_default" style="font-size: 40px;">This user has made their posts private.</p>
+            <p class="text-center cursor_default lead px-4 mt-3" style="font-size: 30px;"><i class="fas fa-user-lock"></i>&nbsp;&nbsp;{{ user.username }}'s posts are protected.</p>
           </div>
         {% endif %}
 

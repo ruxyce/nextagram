@@ -54,6 +54,9 @@ readers do not read off random characters that represent icons */
 .fa-trash-alt:before {
   content: "\f2ed"; }  
 
+.fa-user-lock:before {
+  content: "\f502"; }
+
 .fa-user-slash:before {
   content: "\f506"; }
 
