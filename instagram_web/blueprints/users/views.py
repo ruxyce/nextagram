@@ -231,12 +231,12 @@ def show(username):
             error_header='User Not Found',
             error_text="Who you're looking for does not exist! :("
         )
-    u_followers = user.followers()
-    u_followings = user.following()
+    u_followers = user.followers
+    u_followings = user.following
 
     following = []
     if current_user.is_authenticated:
-        following = current_user.following()
+        following = current_user.following
     return render_template('users/show.html', user=user, u_followers=u_followers, u_followings=u_followings, following=following)
 
 @users_blueprint.route('/u/all', methods=["GET","POST"])
@@ -244,7 +244,7 @@ def index():
     users = User.select().order_by(User.id).prefetch(Post, Like)
     following = []
     if current_user.is_authenticated:
-        following = current_user.following()
+        following = current_user.following
     return render_template('users/index.html', users=users, following=following)
 
 @users_blueprint.route('/u/search')
@@ -253,7 +253,7 @@ def search():
     users = User.select().where(User.username.contains(term))
     following = []
     if current_user.is_authenticated:
-        following = current_user.following()
+        following = current_user.following
     return render_template('users/index.html', users=users, following=following, term=term)
 
 @users_blueprint.route('/u/<username>/following', methods=["GET"])
@@ -261,11 +261,11 @@ def show_following(username):
     user = User.get_or_none(User.username == username)
 
     if user:
-        u_followers = user.followers()
-        u_followings = user.following()
+        u_followers = user.followers
+        u_followings = user.following
         following = []
         if current_user.is_authenticated:
-            following = current_user.following()
+            following = current_user.following
         return render_template('users/show_following.html', user=user, u_followers=u_followers, u_followings=u_followings, following=following)
     
     return render_template('error.html',
@@ -278,11 +278,11 @@ def show_followers(username):
     user = User.get_or_none(User.username == username)
 
     if user:
-        u_followers = user.followers()
-        u_followings = user.following()
+        u_followers = user.followers
+        u_followings = user.following
         following = []
         if current_user.is_authenticated:
-            following = current_user.following()
+            following = current_user.following
         return render_template('users/show_followers.html', user=user, u_followers=u_followers, u_followings=u_followings, following=following)
 
     return render_template('error.html',

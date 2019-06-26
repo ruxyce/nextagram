@@ -32,9 +32,8 @@ def index():
     page = request.args.get('page')
     posts = (Post
             .select()
-            .where((Post.user.in_(current_user.following())) | (Post.user_id == current_user.id))
+            .where((Post.user.in_(current_user.following)) | (Post.user_id == current_user.id))
             .order_by(Post.created_at.desc()))
-
     # add handler for 0 post
     total_posts = len(posts)
     posts_per_page = 2

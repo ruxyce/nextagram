@@ -31,8 +31,8 @@ def show(user_id):
             { "id": user.id,
                 "username": user.username,
                 "avatar": user.avatar_url,
-                "followers": [follower.id for follower in user.followers()],
-                "following": [following.id for following in user.following()] }
+                "followers": [follower.id for follower in user.followers],
+                "following": [following.id for following in user.following] }
         )
 
     return jsonify({
@@ -96,8 +96,11 @@ def my_following():
     user = User.get_or_none(User.id == get_jwt_identity())
     if not user:
         return jsonify({"status": "failed"}), 401
-    my_following = [following.id for following in user.following()]
-    return jsonify(my_following)
+    approved = [guy.id for guy in user.following]
+    pending = [guy.id for guy in user.following_requests]
+    return jsonify(
+        { "my_following": { "approved": approved, "pending": pending } }
+    )
 
 @users_api_blueprint.route('/followers/me', methods=['GET'])
 @jwt_required
@@ -105,7 +108,7 @@ def my_followers():
     user = User.get_or_none(User.id == get_jwt_identity())
     if not user:
         return jsonify({"status": "failed"}), 401
-    my_followers = [follower.id for follower in user.followers()]
+    my_followers = [follower.id for follower in user.followers]
     return jsonify(my_followers)
 
 @users_api_blueprint.route('/follow/<user_id>', methods=['POST'])
@@ -114,9 +117,21 @@ def follow(user_id):
     user = User.get_or_none(User.id == get_jwt_identity())
     user.follow(user_id)
 
+    approved = [guy.id for guy in user.following]
+    pending = [guy.id for guy in user.following_requests]
+    return jsonify(
+        { "my_following": { "approved": approved, "pending": pending } }
+    )
+
 
 @users_api_blueprint.route('/unfollow/<user_id>', methods=['POST'])
 @jwt_required
 def unfollow(user_id):
     user = User.get_or_none(User.id == get_jwt_identity())
     user.unfollow(user_id)
+
+    approved = [guy.id for guy in user.following]
+    pending = [guy.id for guy in user.following_requests]
+    return jsonify(
+        { "my_following": { "approved": approved, "pending": pending } }
+    )  

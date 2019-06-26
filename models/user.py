@@ -31,6 +31,7 @@ class User(BaseModel, UserMixin):
                 .where((Relationship.from_user == self) & (Relationship.approved == False))
                 .order_by(User.username))
 
+    @hybrid_property
     def following(self):
         # query other users through the "relationship" table
         return (User
@@ -39,6 +40,7 @@ class User(BaseModel, UserMixin):
                 .where((Relationship.from_user == self) & (Relationship.approved == True))
                 .order_by(User.username))
 
+    @hybrid_property
     def followers(self):
         return (User
                 .select()

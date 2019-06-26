@@ -27,7 +27,7 @@
 <h3 class="text-center text-dark mt-2 py-2 lead user_page_username">{{ user.username }}</h3>
 
 <div class="text-center mb-3 mx-auto" style="max-width: 500px;">
-{% if current_user.is_authenticated and current_user in user.followers() %}
+{% if current_user.is_authenticated and current_user in user.followers %}
     <form action="{{ url_for('users.unfollow', user_id=user.id) }}" method="POST" id="unfollow_form">
       <input type="hidden" name="next" value="{{ url_for('users.show', username=user.username) }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
